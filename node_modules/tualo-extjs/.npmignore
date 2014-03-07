@@ -1,0 +1,7 @@
+/node_modules
+/macos
+/doc
+.DS_Store
+data.sqlite
+data.sqlite-journal
+/npm-debug.log
