@@ -8,6 +8,7 @@ var msg = require('./routes/msg');
 var http = require('http');
 var path = require('path');
 var socket = require('socket.io');
+var ext = require("tualo-extjs");
 var app = express();
 var MessageCenter = require("./messageCenter/messageCenter");
 var msgCenter = MessageCenter.getInstance();
@@ -18,6 +19,7 @@ var testPlugin = require("./plugins/testPlugin");
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use(ext.middleware);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -28,8 +30,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.post("/msg", function(req, res, next) {
+
 	msg.msgHandler(req, res, next, msgCenter);
 })
+app.get("/msg", function(req, res, next) {
+
+throw new Error("error test");
+})
+
 // development only
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());

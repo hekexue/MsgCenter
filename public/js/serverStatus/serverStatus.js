@@ -159,6 +159,7 @@ define(["../msgCenter/clientMessageCenter"], function(MsgCenter) {
             debugger;
             //connect the 
             msgCenter.send({
+                id:"serverWatchPlugin",
                 event: "startWatch",
                 msg: {
                     interval: 2000
@@ -167,6 +168,7 @@ define(["../msgCenter/clientMessageCenter"], function(MsgCenter) {
         },
         stopWatch: function() {
             msgCenter.send({
+                id:"serverWatchPlugin",
                 event: "stopWatch",
                 msg: null
             });
