@@ -13,7 +13,7 @@ var app = express();
 var MessageCenter = require("./messageCenter/messageCenter");
 var msgCenter = MessageCenter.getInstance();
 var testPlugin = require("./plugins/testPlugin");
-
+var serverWatchPlugin = require("./plugins/serverWatchPlugin");
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -64,7 +64,7 @@ if (appEnv.multiProcess) {
 }
 
 
-msgCenter.reg([testPlugin], io);
+msgCenter.reg([testPlugin,serverWatchPlugin], io);
 io.sockets.on("connection", function(socket) {
 	msgCenter.initService({
 		socket: socket

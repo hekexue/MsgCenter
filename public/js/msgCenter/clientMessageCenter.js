@@ -13,7 +13,7 @@ define(["../lib/Runtime","../lib/Event","../lib/Type"],function (runtime,Event,T
 				script.onload = script.onreadystatechange = null;
 			}
 		};
-		script.src = 'http://127.0.0.1:5000/socket.io/socket.io.js';
+		script.src = 'http://127.0.0.1:3000/socket.io/socket.io.js';
 		head.appendChild(script);
 	}
 	var 

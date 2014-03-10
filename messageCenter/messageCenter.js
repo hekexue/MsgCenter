@@ -43,7 +43,7 @@ MessageCenter.prototype = {
 	_serverSideHandlers: function(plugin, listeners, socket) {
 		var listener = function() {};
 		var me = this;
-		for (var j = 0, len2 = listeners.length; j < len; j++) {
+		for (var j = 0, len = listeners.length; j < len; j++) {
 			listener = listeners[j];
 			if (listener && listener.listen) {
 				socket.on(plugin.id + listener.listen, (function(listener) {

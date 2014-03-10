@@ -142,7 +142,7 @@ define(["../msgCenter/clientMessageCenter"], function(MsgCenter) {
      * @return {[type]} [description]
      */
     function connectServer() {
-        msgCenter.connect("http://127.0.0.1:5000/");
+        msgCenter.connect("http://127.0.0.1:3000/");
     }
 
     /**

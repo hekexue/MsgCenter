@@ -8,7 +8,23 @@
 	<input type="button" value="stop watch server status" onClick="stopWatch()">
 	<script src="./js/common/require.js"></script>
 <script>
+  var watchStatus,stopWatch;
+	
+  require.config({
+    baseUrl: "/js"
+  });
 
-</script>
+
+  require(["serverStatus/serverStatus"],
+    function(serverStatus) {
+    	watchStatus = function(){
+    	  	serverStatus.startWatch();
+    	}
+    	stopWatch = function(){
+    	    serverStatus.stopWatch();
+    	}
+    }
+  );
+  </script>
 </body>
 </html>
