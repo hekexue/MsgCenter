@@ -12,39 +12,39 @@ module.exports = serverWatchPlugin = {
 				interval = (msg && msg.interval) || 30000,
 				timer = me.timers[socket.id],
 				data = {};
-			if (!timer) {
-				timer = setInterval(function() {
-					async.parallel([
-						function(callback) {
-							os.cpuUsage(function(data) {
-								callback(null, data);
-							});
-						},
-						function(callback) {
-							os.getProcesses(0,function() {
-								callback(null, data);
-							})
-						}
-					], function(err, results) {
-						if (err) {
-							console.log(err);
-						}
-						var data = {
-							loadAvg: os.loadavg(1),
-							memoryTotal: os.totalmem(),
-							memoryFree: os.freemem(),
-							memoryUsageRate: 0,
-							cpuUsage: results[0],
-							processInfo: results[1],
-							serverTime: (new Date()).toString()
-						};
-						data.memoryUsageRate = (data.memoryTotal - data.memoryFree) / data.memoryTotal;
-						//send the data to client side
-						socket.emit(me.emitName, data);
-					});
-				}, interval);
-				me.timers[socket.id] = timer;
-			}
+			clearInterval(timer);
+			timer = setInterval(function() {
+				async.parallel([
+
+					function(callback) {
+						os.cpuUsage(function(data) {
+							callback(null, data);
+						});
+					},
+					function(callback) {
+						os.getProcesses(0, function() {
+							callback(null, data);
+						})
+					}
+				], function(err, results) {
+					if (err) {
+						console.log(err);
+					}
+					var data = {
+						loadAvg: os.loadavg(1),
+						memoryTotal: os.totalmem(),
+						memoryFree: os.freemem(),
+						memoryUsageRate: 0,
+						cpuUsage: results[0],
+						processInfo: results[1],
+						serverTime: (new Date()).toString()
+					};
+					data.memoryUsageRate = (data.memoryTotal - data.memoryFree) / data.memoryTotal;
+					//send the data to client side
+					socket.emit(me.emitName, data);
+				});
+			}, interval);
+			me.timers[socket.id] = timer;
 		}
 	}, {
 		listen: "stopWatch",

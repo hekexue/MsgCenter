@@ -155,9 +155,7 @@ define(["../msgCenter/clientMessageCenter"], function(MsgCenter) {
     }
     init();
     return {
-        startWatch: function() {
-            debugger;
-            //connect the 
+        startWatch: function() { 
             msgCenter.send({
                 id:"serverWatchPlugin",
                 event: "startWatch",
