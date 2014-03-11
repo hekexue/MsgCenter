@@ -52,7 +52,7 @@ module.exports = serverWatchPlugin = {
 			//console.log(this.linsten);
 			var me = serverWatchPlugin,
 				timer = me.timers[socket.id];
-			if (typeof timer === "number") {
+			if (timer) {
 				clearInterval(timer);
 			}
 		}
