@@ -23,9 +23,15 @@ function tooFreequent() {
 	}
 }
 
+cluster.on('fork', function(worker) {
+	console.log("worker process id is "+worker.process.pid);
+  
+});
+
 cluster.setupMaster({
 	exec: "app.js"
 });
+
 
 for (var i = 0; i < len; i++) {
 	cluster.fork();
@@ -38,7 +44,8 @@ cluster.on("exit", function(worker, code, signal) {
 	if (tooFreequent()) {
 		setTimeout(function() {
 			if (cluster.workers.length < len) {
-				cluster.fork();
+			var worker=cluster.fork();
+			console.log("new worker process id is "+worker.process.pid);
 			}
 		}, 6000)
 	} else {
