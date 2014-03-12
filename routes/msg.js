@@ -18,6 +18,10 @@ module.exports = {
 			// 	extraData: {}
 			// }
 			try {
+				console.log(req.param("data"));
+				if(req.param("data") && JSON.parse(req.param("data"))){
+					data = JSON.parse(req.param("data"));
+				}		
 				var data = JSON.parse(req.param("data")),
 					pluginId = "";				
 				if (data) {

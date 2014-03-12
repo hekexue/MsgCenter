@@ -1,6 +1,6 @@
 /*response to mantain the websocket links of the clients*/
 var redis = require('redis'),
-	appEnv = require("../config/environment"),	
+	appEnv = require("../config/environment"),
 	type = require("../lib/type"),
 	EventEmitter = require('events').EventEmitter,
 	instance = null;
@@ -60,6 +60,16 @@ MessageCenter.prototype = {
 			}
 		}
 	},
+	execPlugins: function(event, args) {
+		var plugins = this.plugins,
+			plugin = null;
+		for (var plg in plugins) {
+			plugin = plugins[plg];
+			if (plugin && type.isFunction(plugin[event])) {
+				plugin[event].apply(plugin, args);
+			}
+		}
+	},
 	/**
 	 * setup server-side-plugin
 	 * @param  {Array} plugins server-side-plugins
@@ -110,15 +120,20 @@ MessageCenter.prototype = {
 	 * @return {[type]}      [description]
 	 */
 	clientRegRequest: function(data) {
-		var socket = arguments[arguments.length - 1];
+		var me = this,
+			len = arguments.length,
+			socket = arguments[len - 1],
+			clientCallBack = arguments[len - 2];
 		//if client end send the user identifier, 
 		//use it as the key to all the socket connections linked in by the same user;
 		if (type.isObject(data) && data.bid) {
 			this.store.sadd(data.bid, socket.id);
 		}
-		clientCallBack = arguments[arguments.length - 2];
 		if (type.isFunction(clientCallBack)) {
+			this.execPlugins("afterConnected", [data, clientCallBack, me, socket]);
 			clientCallBack(this.plugins);
+		} else {
+			this.execPlugins("afterConnected", [data, null, me, socket]);
 		}
 	},
 	/**
@@ -193,7 +208,7 @@ MessageCenter.prototype = {
 					//setTimeout(function() {
 					switch (receiver.type * 1) {
 						case 0:
-							io.sockets. in (receiver.id).emit(plg.emitName, data);
+							io.sockets. in (receiver.id).emit(plugin.emitName, data);
 							break; //receiver is the whole room
 						case 1:
 							//get user's socketid by business-logical id and send the data to all socket-clients this id holds
@@ -203,8 +218,10 @@ MessageCenter.prototype = {
 										j = 0;
 									for (; j < jlen; j++) {
 										skt = io.sockets.socket(userSkts[j]);
-										//emmit data
-										skt.emmit(plg.emitName, data);
+										if (skt) {
+											//emit data
+											skt.emit(plugin.emitName, data);
+										}
 									}
 								}
 							});

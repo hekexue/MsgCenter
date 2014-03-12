@@ -15,7 +15,6 @@ module.exports = serverWatchPlugin = {
 			clearInterval(timer);
 			timer = setInterval(function() {
 				async.parallel([
-
 					function(callback) {
 						os.cpuUsage(function(data) {
 							callback(null, data);

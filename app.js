@@ -49,6 +49,7 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 
 
 var io = socket.listen(server);
+io.set('log level', 1); 
 /*if the service is supporited by multi-porcess or multi-server,than use redis client as data store*/
 if (appEnv.multiProcess) {
 	var RedisStore = require('socket.io/lib/stores/redis'),
