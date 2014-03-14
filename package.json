@@ -13,6 +13,7 @@
     "os-utils":"*",
     "async":"*",
     "extend":"*",
-    "clone":"*"
+    "clone":"*",
+    "socket.io":"*"
   }
 }
